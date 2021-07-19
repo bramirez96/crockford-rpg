@@ -18,7 +18,6 @@ function Count__constructor({ DOMID: Count__DOM_ID }: { DOMID: string }) {
     // Update the bucket content
     const bucket = $(Count__DOM_ID);
     if (bucket) {
-      console.log('rendering', state);
       bucket.innerHTML = `${state?.next ?? getCount()}`;
     }
   }

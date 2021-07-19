@@ -1,4 +1,9 @@
-import { IStateEffect, IStateSetterFunction, IStateSetterParam } from './types';
+import {
+  CommitError,
+  IStateEffect,
+  IStateSetterFunction,
+  IStateSetterParam,
+} from './types';
 
 export interface IStateStore<DataType extends unknown> {
   current?: DataType;
@@ -23,7 +28,6 @@ export default function useState<DataType = object>(
   function commit() {
     const oldPrevValue = { ...state };
     try {
-      console.log('committing', state);
       if (isObj(state.current)) {
         if (state.current) {
           state.prev = state.prev
@@ -38,10 +42,11 @@ export default function useState<DataType = object>(
         state.current = state.next;
       }
       state.next = undefined;
-      console.log('committed', state);
     } catch (err) {
-      console.log('Error committing state. Rolling back.');
+      const cErr = new CommitError(err);
+      console.error(cErr);
       state = oldPrevValue;
+      // throw cErr; // Eventually this might throw an error...
     }
   }
 

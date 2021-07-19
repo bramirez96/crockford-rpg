@@ -12,3 +12,19 @@ export type IStateSetterParam<DataType> =
 export type IStateSetterFunction<DataType> = (
   param: IStateSetterParam<DataType>,
 ) => void;
+export class CommitError extends Error {
+  public isUseStateCommitError = true;
+  public initialError: unknown;
+
+  /**
+   * Optionally pass in the initial error object that caused the commit to fail
+   */
+  constructor(err?: unknown) {
+    super('Error committing state. Rolling back.');
+    this.initialError = err;
+  }
+}
+
+export function isCommitError(err: unknown): err is CommitError {
+  return (err as CommitError)?.isUseStateCommitError ?? false;
+}
