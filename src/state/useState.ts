@@ -1,3 +1,4 @@
+import { isObj } from '../utils';
 import {
   CommitError,
   IStateEffect,
@@ -9,10 +10,6 @@ export interface IStateStore<DataType extends unknown> {
   current?: DataType;
   prev?: DataType;
   next?: DataType;
-}
-
-export function isObj(query: unknown): query is object {
-  return typeof query === 'object';
 }
 
 export default function useState<DataType = object>(

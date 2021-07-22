@@ -8,6 +8,7 @@ function Count__constructor({ DOMID: Count__DOM_ID }: { DOMID: string }) {
     // We need to manually tie in the render effect since we don't have context
     effects: [Count__render, useState__logger('count')],
   });
+
   // Render the count state to the DOM
   function Count__render(state?: IStateEffectParams<number>) {
     // Add increment function to the mousedown for the button
