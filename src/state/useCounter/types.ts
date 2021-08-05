@@ -5,6 +5,7 @@ import { IStateEffect } from '../effects';
  */
 export interface ICounterParams {
   initialValue?: number;
+  defaultValue?: number;
   step?: number;
   effects?: IStateEffect<number>[];
 }
@@ -15,4 +16,5 @@ export interface ICounterParams {
 export interface ICounterMethods extends ICounterParams {
   getCount: () => number;
   increment: () => void;
+  reset: () => void;
 }

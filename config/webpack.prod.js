@@ -1,17 +1,17 @@
-const path = require("path");
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
-const glob = require("glob");
+const glob = require('glob');
 const CompressionPlugin = require('compression-webpack-plugin');
 const BrotliPlugin = require('brotli-webpack-plugin');
 
 module.exports = {
   entry: {
-    main: './src/index.ts'
+    main: './src/views/index.ts',
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
@@ -33,8 +33,8 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
-        }
+          loader: 'babel-loader',
+        },
       },
       {
         test: /\.(sa|sc|c)ss$/,
@@ -43,7 +43,7 @@ module.exports = {
           'css-loader',
           'postcss-loader',
           'sass-loader',
-        ]
+        ],
       },
       {
         test: /\.(png|svg|jpe?g|gif)$/,
@@ -66,50 +66,47 @@ module.exports = {
               list: [
                 { tag: 'img', attribute: 'src', type: 'src' },
                 { attribute: 'data-src', type: 'src' },
-                { attribute: 'data-srcset', type: 'srcset' }
-              ]
+                { attribute: 'data-srcset', type: 'srcset' },
+              ],
             },
             minimize: true,
           },
         },
       },
-    ]
+    ],
   },
   optimization: {
-    minimizer: [
-      new TerserJSPlugin(),
-      new OptimizeCSSAssetsPlugin(),
-    ],
+    minimizer: [new TerserJSPlugin(), new OptimizeCSSAssetsPlugin()],
     splitChunks: {
       cacheGroups: {
         commons: {
           test: /[\\/]node_modules[\\/]/,
-          name: "vendors",
-          chunks: "all"
-        }
+          name: 'vendors',
+          chunks: 'all',
+        },
       },
-      chunks: "all"
+      chunks: 'all',
     },
     runtimeChunk: {
-      name: "runtime"
-    }
+      name: 'runtime',
+    },
   },
   plugins: [
     new CleanWebpackPlugin(),
     new PurgecssPlugin({
-      paths: glob.sync(path.resolve(__dirname, '../src/**/*'), { nodir: true })
+      paths: glob.sync(path.resolve(__dirname, '../src/**/*'), { nodir: true }),
     }),
     new MiniCssExtractPlugin({
-      filename: "[name].[chunkhash:8].bundle.css",
-      chunkFilename: "[name].[chunkhash:8].chunk.css",
+      filename: '[name].[chunkhash:8].bundle.css',
+      chunkFilename: '[name].[chunkhash:8].chunk.css',
     }),
     new HtmlWebpackPlugin({
-      template: './src/index.html',
-      filename: 'index.html'
+      template: './src/views/index.html',
+      filename: 'index.html',
     }),
     new CompressionPlugin({
       algorithm: 'gzip',
     }),
     new BrotliPlugin(),
-  ]
+  ],
 };

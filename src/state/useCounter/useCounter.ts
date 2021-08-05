@@ -12,9 +12,11 @@ export default function useCounter(params?: ICounterParams): ICounterMethods {
   // Initialize our state parameters
   const initialValue = params?.initialValue || 0; // Default to 0 if unset
   const effects = params?.effects || []; // Default to empty array if unset
+  // Get our starting count value
+  const startingValue = params?.defaultValue || initialValue; // Default to initial if unset
 
   // Create our state instance
-  const [getCount, setCount] = useState(initialValue, effects); // Create a state instance
+  const [getCount, setCount] = useState(startingValue, effects); // Create a state instance
 
   // Create the increment function
   const step = params?.step || 1; // Initialize this outsize of the function as it is never recalculated
@@ -22,10 +24,16 @@ export default function useCounter(params?: ICounterParams): ICounterMethods {
     setCount((prev) => prev + step);
   }
 
+  // Create a reset function
+  function reset() {
+    setCount(initialValue);
+  }
+
   // Instead of exposing `setCount`, we expose `increment`
   return {
     getCount,
     increment,
+    reset,
     initialValue,
     effects,
     step,

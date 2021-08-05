@@ -9,24 +9,30 @@ import { Button } from '../../atoms';
 
 export default function Counter__constructor({
   DOMID,
+  effects,
   ...counterParams
 }: ICounterParams & {
   DOMID: string;
 }) {
   // Initialize a counter state object
-  const { getCount, increment, step } = useCounter({
+  const { getCount, increment, reset, step, initialValue } = useCounter({
     /**
      * Here, passing in the render function as an effect allows us
      * to rerender the component
      */
-    effects: [Count__render, logger('count')],
+    effects: [...effects, Count__render, logger('count')],
     ...counterParams,
   });
 
-  const buttonText = `Add ${step}!`;
+  /** Some variables don't need to recalculate every render... */
 
-  // Declare IDs for child elements
-  const buttonId = `${DOMID}__incrementButton`;
+  // Increment Button Props
+  const incBtnText = `Add ${step}!`;
+  const incBtnId = `${DOMID}__incrementButton`;
+  // Reset Button Props
+  const rstBtnText = `Reset to ${initialValue}`;
+  const rstBtnId = `${DOMID}__resetButton`;
+  // Count Span Props
   const spanId = `${DOMID}__textCount`;
 
   // Render the count state to the DOM
@@ -40,8 +46,15 @@ export default function Counter__constructor({
     // Create a button element that increments our counter
     const incrementButton = Button({
       onClick: increment,
-      text: buttonText,
-      DOMID: buttonId,
+      text: incBtnText,
+      DOMID: incBtnId,
+    });
+
+    // Create a button element that resets our counter
+    const resetButton = Button({
+      onClick: reset,
+      text: rstBtnText,
+      DOMID: rstBtnId,
     });
 
     // Make sure we have a container
@@ -51,17 +64,20 @@ export default function Counter__constructor({
     }
 
     if (container.hasChildNodes()) {
-      // Replace old elements
+      // Replace old count, buttons can stay!
       const oldSpan = $(`#${spanId}`);
       container.replaceChild(countText, oldSpan);
-      const oldButton = $(`#${buttonId}`);
-      container.replaceChild(incrementButton, oldButton);
+      // const oldIncBtn = $(`#${incBtnId}`);
+      // container.replaceChild(incrementButton, oldIncBtn);
+      // const oldRstBtn = $(`#${rstBtnId}`);
+      // container.replaceChild(resetButton, oldRstBtn);
     } else {
       // The first time, don't replace - add!
       container.append(
         countText,
         document.createElement('br'),
         incrementButton,
+        resetButton,
       );
     }
 

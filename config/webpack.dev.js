@@ -1,17 +1,19 @@
-const path = require("path");
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const package = require('../package.json');
 
 module.exports = {
   entry: {
-    main: './src/index.ts'
+    main: './src/views/index.ts',
+    vendor: Object.keys(package.dependencies),
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
     path: path.join(__dirname, '../build'),
-    filename: '[name].bundle.js'
+    filename: '[name].bundle.js',
   },
   mode: 'development',
   devServer: {
@@ -32,17 +34,12 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
-        }
+          loader: 'babel-loader',
+        },
       },
       {
         test: /\.(sa|sc|c)ss$/,
-        use: [
-          'style-loader', 
-          'css-loader',
-          'postcss-loader',
-          'sass-loader'
-        ]
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
       },
       {
         test: /\.(png|svg|jpe?g|gif)$/,
@@ -65,20 +62,26 @@ module.exports = {
               list: [
                 { tag: 'img', attribute: 'src', type: 'src' },
                 { attribute: 'data-src', type: 'src' },
-                { attribute: 'data-srcset', type: 'srcset' }
-              ]
+                { attribute: 'data-srcset', type: 'srcset' },
+              ],
             },
             minimize: true,
           },
         },
       },
-    ]
+    ],
   },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: './src/index.html',
-      filename: 'index.html'
+      template: './src/views/index.html',
+      filename: 'index.html',
+      chunks: ['vendor', 'main'],
     }),
-  ]
+    new HtmlWebpackPlugin({
+      template: './src/views/page2.html',
+      filename: 'page2.html',
+      chunks: ['vendor'],
+    }),
+  ],
 };
