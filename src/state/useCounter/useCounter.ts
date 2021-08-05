@@ -1,22 +1,14 @@
-import { IStateEffect, useState } from '../state';
-
-export interface ICounterParams {
-  initialValue?: number;
-  step?: number;
-  effects?: IStateEffect<number>[];
-}
-
-export interface ICounter {
-  getCount: () => number;
-  increment: () => void;
-}
+import { useState } from '../useState';
+import { ICounterMethods, ICounterParams } from './types';
 
 /**
- * A wrapper around the standard `useState` function that
+ * A wrapper around the standard `useState` function that exposes a simple
+ * counter's `getCount` and `increment` methods.
+ *
  * @param params an augmented version of the standard useState params
  * @returns an object exposing the `getCount` and the `increment` methods
  */
-export default function useCounter(params?: ICounterParams): ICounter {
+export default function useCounter(params?: ICounterParams): ICounterMethods {
   // Initialize our state parameters
   const initialValue = params?.initialValue || 0; // Default to 0 if unset
   const effects = params?.effects || []; // Default to empty array if unset
@@ -34,5 +26,8 @@ export default function useCounter(params?: ICounterParams): ICounter {
   return {
     getCount,
     increment,
+    initialValue,
+    effects,
+    step,
   };
 }

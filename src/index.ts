@@ -1,37 +1,12 @@
-import { useCounter } from './scripts';
-import { IStateEffectParams, logger } from './state';
-import { $ } from './utils';
+import { Counter } from './components';
 
-function Counter__init({ DOMID: Count__DOM_ID }: { DOMID: string }) {
-  // Initialize a counter state object
-  const { getCount, increment } = useCounter({
-    // We need to manually tie in the render effect since we don't have context
-    effects: [Count__render, logger('count')],
-  });
-
-  // Render the count state to the DOM
-  function Count__render(state?: IStateEffectParams<number>) {
-    // Add increment function to the mousedown for the button
-    const button = $('#trigger');
-    button.removeEventListener('mousedown', increment);
-    button.addEventListener('mousedown', increment);
-
-    // Update the bucket content
-    const bucket = $(Count__DOM_ID);
-    if (bucket) {
-      bucket.innerHTML = `${state?.next ?? getCount()}`;
-    }
-  }
-
-  return {
-    render: Count__render,
-  };
-}
-
-const Count = Counter__init({ DOMID: '#displayCount' });
+// Initialize an instance of the Counter component to render to our HTML
+const counterRef = Counter({ DOMID: 'demoCounter' });
 
 // On window load...
 window.addEventListener('load', () => {
-  // Render the count to the DOM on page load
-  Count.render();
+  // Render the Counter to the DOM!
+  counterRef.render();
+
+  console.log('Window loaded! Current count:', counterRef.getCount());
 });
