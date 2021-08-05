@@ -1,6 +1,6 @@
 # Overview
 
-Here I'm just going to go over what all of the packages are doing for my own sanity
+A quick overview of all of the different `babel` and `webpack` extensions this project uses.
 
 - webpack: bundles our code
 - babel: allows us to use modern javascript
