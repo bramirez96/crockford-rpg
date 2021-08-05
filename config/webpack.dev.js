@@ -4,9 +4,15 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const package = require('../package.json');
 
 module.exports = {
+  /**
+   * Here we declare and name our different Javascript chunks to control
+   * what gets included in each page's bundle.
+   */
   entry: {
-    main: './src/views/index.ts',
+    /** the vendor chunk is package deps */
     vendor: Object.keys(package.dependencies),
+    /** these point to specific javascript files in views */
+    home: './src/views/index.ts',
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
@@ -73,10 +79,15 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
+    /**
+     * In the plugins, we specify different html pages that need to be exposed
+     * as well ass all of the different named chunks that should be included in
+     * that page's bundle.
+     */
     new HtmlWebpackPlugin({
       template: './src/views/index.html',
       filename: 'index.html',
-      chunks: ['vendor', 'main'],
+      chunks: ['vendor', 'home'], // This page includes package deps and the home ts file
     }),
     new HtmlWebpackPlugin({
       template: './src/views/page2.html',
