@@ -1,12 +1,12 @@
 import { useCounter } from './scripts';
-import { IStateEffectParams, useState__logger } from './state';
+import { IStateEffectParams, logger } from './state';
 import { $ } from './utils';
 
-function Count__constructor({ DOMID: Count__DOM_ID }: { DOMID: string }) {
+function Counter__init({ DOMID: Count__DOM_ID }: { DOMID: string }) {
   // Initialize a counter state object
   const { getCount, increment } = useCounter({
     // We need to manually tie in the render effect since we don't have context
-    effects: [Count__render, useState__logger('count')],
+    effects: [Count__render, logger('count')],
   });
 
   // Render the count state to the DOM
@@ -28,7 +28,7 @@ function Count__constructor({ DOMID: Count__DOM_ID }: { DOMID: string }) {
   };
 }
 
-const Count = Count__constructor({ DOMID: '#displayCount' });
+const Count = Counter__init({ DOMID: '#displayCount' });
 
 // On window load...
 window.addEventListener('load', () => {

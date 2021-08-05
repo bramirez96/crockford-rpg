@@ -1,6 +1,6 @@
-import { IStateEffectParams } from './types';
+import { IStateEffectParams } from "./types";
 
-export function useState__logger<DataType>(label: string) {
+export default function useState__logger<DataType>(label: string) {
   return function useState__logger__inner({
     next,
     prev,

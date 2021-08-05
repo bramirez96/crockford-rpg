@@ -1,16 +1,7 @@
-import { isObj } from '../utils';
-import {
-  CommitError,
-  IStateEffect,
-  IStateSetterFunction,
-  IStateSetterParam,
-} from './types';
-
-export interface IStateStore<DataType extends unknown> {
-  current?: DataType;
-  prev?: DataType;
-  next?: DataType;
-}
+import { isObj } from '../../utils';
+import { IStateEffect } from '../effects';
+import { CommitError } from './commitError';
+import { IStateSetterFunction, IStateSetterParam, IStateStore } from './types';
 
 export default function useState<DataType = object>(
   defaultValue: DataType | undefined,

@@ -1,4 +1,4 @@
-import { IStateEffect, useState, useState__logger } from '../state';
+import { IStateEffect, useState } from '../state';
 
 export interface ICounterParams {
   initialValue?: number;
@@ -11,24 +11,26 @@ export interface ICounter {
   increment: () => void;
 }
 
+/**
+ * A wrapper around the standard `useState` function that
+ * @param params an augmented version of the standard useState params
+ * @returns an object exposing the `getCount` and the `increment` methods
+ */
 export default function useCounter(params?: ICounterParams): ICounter {
-  // Initialize state
+  // Initialize our state parameters
   const initialValue = params?.initialValue || 0; // Default to 0 if unset
   const effects = params?.effects || []; // Default to empty array if unset
-  effects.push(useState__logger('Counter'));
+
+  // Create our state instance
   const [getCount, setCount] = useState(initialValue, effects); // Create a state instance
 
   // Create the increment function
   const step = params?.step || 1; // Initialize this outsize of the function as it is never recalculated
   function increment() {
     setCount((prev) => prev + step);
-    // const count = getCount(); // Get the current count value
-    // const next = count + step;
-
-    // // This will run all of the effects for us!
-    // setCount(next);
   }
 
+  // Instead of exposing `setCount`, we expose `increment`
   return {
     getCount,
     increment,
